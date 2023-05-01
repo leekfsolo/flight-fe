@@ -1,0 +1,19 @@
+@use "styles/index" as *;
+
+.container {
+  .wrapper-container {
+    padding: 0 70px;
+
+    @include desktop {
+      padding: 0;
+    }
+
+    @include tablet {
+      padding: 0 12px;
+    }
+
+    @include mobile {
+      padding: 0 4px;
+    }
+  }
+}

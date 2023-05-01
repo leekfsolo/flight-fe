@@ -1,0 +1,84 @@
+@use "styles/index" as *;
+
+.home {
+  &-banner {
+    height: calc(100vh - 100px);
+    position: relative;
+
+    &__content {
+      position: absolute;
+      top: 30%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      z-index: 50;
+
+      p {
+        color: white;
+        text-transform: uppercase;
+        font-size: 24px;
+        margin-bottom: 16px;
+        letter-spacing: 2px;
+      }
+
+      h1 {
+        color: white;
+        text-transform: uppercase;
+        font-size: 48px;
+      }
+    }
+
+    &__search {
+      position: absolute;
+      top: 70%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      z-index: 50;
+
+      .search-wrapper {
+        background-color: white;
+        border-radius: 4px;
+        padding: 20px;
+        -webkit-backdrop-filter: blur(5px);
+        backdrop-filter: blur(5px);
+
+        .select-form-control {
+          .MuiSelect-select {
+            padding: 11.5px 14px;
+            padding-right: 32px;
+          }
+        }
+      }
+    }
+
+    .swiper {
+      height: 100%;
+
+      &-pagination {
+        margin-bottom: 30px;
+
+        &-bullet {
+          width: 12px;
+          height: 12px;
+          border: 1px solid white;
+          opacity: 1;
+          background-color: transparent;
+
+          &-active {
+            background-color: $info-550;
+            border-color: transparent;
+          }
+        }
+      }
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        position: relative;
+        filter: brightness(60%);
+      }
+    }
+  }
+}

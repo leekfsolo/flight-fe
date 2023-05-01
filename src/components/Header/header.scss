@@ -1,0 +1,30 @@
+header {
+  box-shadow: 0px 5px 15px rgb(15 36 84 / 5%);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: white;
+
+  .header {
+    min-height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    &-logo {
+      img {
+        height: 60px;
+        object-fit: cover;
+        display: block;
+        max-width: 100%;
+        filter: invert(15%) sepia(61%) saturate(4523%) hue-rotate(193deg)
+          brightness(103%) contrast(94%);
+      }
+    }
+
+    &-account {
+      display: flex;
+      gap: 12px;
+    }
+  }
+}

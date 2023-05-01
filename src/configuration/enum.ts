@@ -1,5 +1,5 @@
 export enum PageUrl {
-  HOME = "home",
+  HOME = "",
   LOGIN = "login",
   PROFILE = "profile",
   DASHBOARD = "dashboard",

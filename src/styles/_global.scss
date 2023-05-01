@@ -1,6 +1,9 @@
 @use "./variables" as *;
 @import url("https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap");
 @import "react-toastify/dist/ReactToastify.css";
+@import "swiper/css";
+@import "swiper/css/pagination";
+@import "swiper/css/effect-fade";
 
 html {
   -webkit-box-sizing: border-box;
@@ -63,4 +66,9 @@ input {
   &[type="number"] {
     -moz-appearance: textfield;
   }
+}
+
+img {
+  display: block;
+  max-width: 100%;
 }
