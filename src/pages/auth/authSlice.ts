@@ -1,20 +1,28 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import authApi from "api/authApi";
+import usersApi from "api/usersApi";
 import { AxiosError } from "axios";
 import Config from "configuration";
 import { IFormLogin, ILoginState } from "pages/interface";
 
 const initialState = (): ILoginState => {
-  const auth = localStorage.getItem(Config.storageKey.auth);
+  const auth = sessionStorage.getItem(Config.storageKey.auth);
   if (auth) {
     return { ...JSON.parse(auth) };
   }
 
   return {
-    isUserExisted: false,
     user: "",
   };
 };
+
+export const signupUser = createAsyncThunk(
+  "user/signup",
+  async (data: IFormLogin) => {
+    const res = await usersApi.signup(data);
+    return res;
+  }
+);
 
 export const authenticate = createAsyncThunk(
   "auth/login",
@@ -52,28 +60,28 @@ const auth = createSlice({
   initialState: initialState(),
   reducers: {
     saveAccessToken: (state, action) => {
-      state.accessToken = action.payload;
+      state.token = action.payload;
     },
   },
   extraReducers: (builder) => {
     builder
       .addCase(authenticate.fulfilled, (state, action: PayloadAction<any>) => {
-        const { msg, success, ...loginState } = action.payload;
-        localStorage.setItem(
-          Config.storageKey.auth,
-          JSON.stringify(loginState)
-        );
-        return loginState;
+        const { token } = action.payload;
+        state.token = token;
+        sessionStorage.setItem(Config.storageKey.auth, JSON.stringify(state));
       })
       .addCase(logout.fulfilled, () => {
-        localStorage.removeItem(Config.storageKey.auth);
+        sessionStorage.removeItem(Config.storageKey.auth);
+        window.location.reload();
       })
       .addCase(getMyInfo.fulfilled, (state, action: PayloadAction<any>) => {
-        state.user = action.payload;
-        localStorage.setItem(Config.storageKey.auth, JSON.stringify(state));
+        state.user = action.payload.data;
+        sessionStorage.setItem(Config.storageKey.auth, JSON.stringify(state));
       })
-      .addCase(getMyInfo.rejected, (state, action: PayloadAction<any>) => {
-        console.log(action.payload);
+      .addCase(signupUser.fulfilled, (state, action: PayloadAction<any>) => {
+        const { token } = action.payload;
+        state.token = token;
+        sessionStorage.setItem(Config.storageKey.auth, JSON.stringify(state));
       });
   },
 });

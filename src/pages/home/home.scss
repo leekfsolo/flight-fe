@@ -2,7 +2,7 @@
 
 .home {
   &-banner {
-    height: calc(100vh - 100px);
+    height: calc(100vh - 80px);
     position: relative;
 
     &__content {
@@ -79,6 +79,42 @@
         position: relative;
         filter: brightness(60%);
       }
+    }
+  }
+
+  &-logos {
+    height: 150px;
+    background-color: $info-100;
+    padding: 16px 0;
+
+    .logo-list {
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      height: 100%;
+
+      .logo-wrapper {
+        img {
+          object-fit: cover;
+          height: 60px;
+          transition: transform 0.2s ease-in-out;
+          min-width: 200px;
+
+          &:hover {
+            transform: scale(1.1);
+          }
+        }
+      }
+    }
+  }
+
+  &-flight {
+    padding: 28px 0;
+
+    h4 {
+      text-align: center;
+      font-weight: 500;
+      font-size: 24px;
     }
   }
 }

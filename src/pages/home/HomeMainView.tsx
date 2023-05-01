@@ -14,6 +14,7 @@ import { FormControl } from "@mui/material";
 
 interface Props {
   bannerList: string[];
+  airlinesLogo: string[];
   ticketType: SelectDataType[];
   ticketData: SelectDataType[];
   searchTicket: (data: ITicketData) => Promise<void>;
@@ -25,7 +26,8 @@ interface ISelectTicket {
 }
 
 const HomeMainView = (props: Props) => {
-  const { bannerList, ticketData, ticketType, searchTicket } = props;
+  const { bannerList, ticketData, ticketType, searchTicket, airlinesLogo } =
+    props;
   const defaultValues: ITicketData = {
     type: ticketType[0].id,
     data: ticketData[0].id,
@@ -94,9 +96,9 @@ const HomeMainView = (props: Props) => {
               noValidate
               onSubmit={handleSubmit(searchTicket)}
             >
-              <div className="d-flex align-items-center gap-3 mb-3">
+              <div className="d-flex align-items-center gap-3 mb-4">
                 {selectTicket.map((value) => (
-                  <FormControl className="select-form-control">
+                  <FormControl className="select-form-control" key={value.name}>
                     <Controller
                       key={value.name}
                       name={value.name}
@@ -130,7 +132,23 @@ const HomeMainView = (props: Props) => {
       </div>
 
       <main>
-        <WrapperContainer></WrapperContainer>
+        <section className="home-logos">
+          <WrapperContainer>
+            <div className="logo-list">
+              {airlinesLogo.map((logo, idx) => (
+                <div className="logo-wrapper" key={idx}>
+                  <img src={logo} alt="" />
+                </div>
+              ))}
+            </div>
+          </WrapperContainer>
+        </section>
+
+        <WrapperContainer>
+          <section className="home-flight">
+            <h4>Offers for Trending Flights</h4>
+          </section>
+        </WrapperContainer>
       </main>
     </div>
   );

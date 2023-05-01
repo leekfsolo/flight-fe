@@ -6,10 +6,13 @@ export interface IFormLogin {
   password: string;
 }
 
+export interface IFormAuth extends IFormLogin {
+  confirmPassword: string;
+}
+
 export interface ILoginState {
-  isUserExisted: boolean;
   user: string;
-  accessToken?: string;
+  token?: string;
 }
 
 export interface BaseProps {

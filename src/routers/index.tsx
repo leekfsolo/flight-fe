@@ -12,11 +12,13 @@ import { ToastContainer } from "react-toastify";
 import Header from "components/Header";
 import Footer from "components/Footer";
 import Home from "pages/home";
+import AuthForm from "pages/auth/AuthForm";
 
 const Routers = () => {
   return (
     <Router>
       <ToastContainer theme="colored" />
+      <AuthForm />
       <Header />
       <Routes>
         <Route element={<PrivateRoute />}></Route>

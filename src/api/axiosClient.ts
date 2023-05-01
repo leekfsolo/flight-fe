@@ -33,14 +33,14 @@ const AxiosInterceptor = ({
     };
 
     const reqInterceptor = (config: AxiosRequestConfig) => {
-      const authJson = localStorage.getItem(Config.storageKey.auth);
+      const authJson = sessionStorage.getItem(Config.storageKey.auth);
 
       if (authJson) {
         const authValue = {
           ...JSON.parse(authJson),
         };
         if (authValue && config.headers) {
-          config.headers.Authorization = `Bearer ${authValue.accessToken}`;
+          config.headers.Authorization = `Bearer ${authValue.token}`;
         }
       }
       return config as any;
@@ -57,7 +57,7 @@ const AxiosInterceptor = ({
 
           return axiosClient(retryRequest);
         } else {
-          localStorage.clear();
+          sessionStorage.clear();
         }
       }
 

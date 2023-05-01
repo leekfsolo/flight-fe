@@ -3,15 +3,15 @@ import axiosClient from "./axiosClient";
 
 const authApi = {
   login: (data: IFormLogin) => {
-    const url = "/api/authenticate/login";
+    const url = "/api/auth/token";
     return axiosClient.post(url, data);
   },
   logout: () => {
-    const url = "/api/authenticate/logout";
+    const url = "/api/auth/logout";
     return axiosClient.post(url);
   },
   getMyInfo: () => {
-    const url = "/api/authenticate/getMyInfo";
+    const url = "/api/auth/getMyInfo";
     return axiosClient.get(url);
   },
 };

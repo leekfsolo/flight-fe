@@ -1,26 +1,18 @@
-@use 'styles/index' as *;
+@use "styles/index" as *;
 
 .wasvalidated {
   .cinput {
     &-valid {
-      .MuiInputBase-input {
+      fieldset.MuiOutlinedInput-notchedOutline {
         border: 1px solid $success-500;
         border-radius: 4px;
-      }
-
-      fieldset {
-        border: none;
       }
     }
 
     &-invalid {
-      .MuiInputBase-input {
+      fieldset {
         border: 1px solid $danger-500;
         border-radius: 4px;
-      }
-
-      fieldset {
-        border: none;
       }
     }
   }
@@ -32,5 +24,20 @@
     position: absolute;
     bottom: -25px;
     left: 0;
+  }
+}
+
+.customInput {
+  &.validate-input {
+    &.customInput-invalid {
+      .MuiFormLabel-root {
+        color: $danger-500;
+      }
+
+      fieldset.MuiOutlinedInput-notchedOutline {
+        border: 1px solid $danger-500;
+        border-radius: 4px;
+      }
+    }
   }
 }

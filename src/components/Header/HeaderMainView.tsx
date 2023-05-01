@@ -1,15 +1,40 @@
-import React from "react";
+import React, { MutableRefObject } from "react";
 import { Logo } from "assets";
+import Avatar from "@mui/material/Avatar";
+import Chip from "@mui/material/Chip";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import CButton from "components/CButton";
 import WrapperContainer from "components/WrapperContainer";
+import { useAppDispatch } from "app/hooks";
+import { handleFormOpenChange, handleFormTypeChange } from "app/globalSlice";
+import CustomDropdown from "components/CustomDropdown/CustomDropdown";
 
 interface Props {
   user?: string;
+  closeAccountDropdown: () => void;
+  toggleDropdown: () => void;
+  accountDropdownDataState: string;
+  accountDropdownRef: MutableRefObject<any>;
+  accountDropdownData: any;
+  navigateTo: (path: string) => Promise<void>;
 }
 
 const HeaderMainView = (props: Props) => {
-  const { user } = props;
+  const dispatch = useAppDispatch();
+  const {
+    user,
+    accountDropdownData,
+    accountDropdownDataState,
+    accountDropdownRef,
+    closeAccountDropdown,
+    navigateTo,
+    toggleDropdown,
+  } = props;
+
+  const handleOpenAuthForm = (type = "signin") => {
+    dispatch(handleFormOpenChange(true));
+    dispatch(handleFormTypeChange(type));
+  };
 
   return (
     <header>
@@ -21,16 +46,51 @@ const HeaderMainView = (props: Props) => {
 
           <div className="header-account">
             {user ? (
-              <>
-                <div className="header-account__cart">
-                  <ShoppingCartIcon />
-                  <span className="cart-total">0</span>
-                </div>
-              </>
+              <div className="header-account__wrapper" onClick={toggleDropdown}>
+                <Chip
+                  avatar={
+                    <Avatar
+                      alt={user}
+                      src="https://png.pngtree.com/png-vector/20190710/ourmid/pngtree-user-vector-avatar-png-image_1541962.jpg"
+                    />
+                  }
+                  className="header-account--avatar"
+                  label={user}
+                  variant="outlined"
+                />
+
+                <CustomDropdown
+                  closeDropdown={closeAccountDropdown}
+                  dropdownState={accountDropdownDataState}
+                  ref={accountDropdownRef}
+                  className="account-dropdown"
+                >
+                  {accountDropdownData.map((data: any) => (
+                    <div
+                      className="account-dropdown__item"
+                      key={data.label}
+                      onClick={() => navigateTo(data.path)}
+                    >
+                      {data.icon}
+                      <span>{data.label}</span>
+                    </div>
+                  ))}
+                </CustomDropdown>
+              </div>
             ) : (
               <>
-                <CButton variant="text">Login</CButton>
-                <CButton variant="outlined">Sign up</CButton>
+                <CButton
+                  variant="text"
+                  onClick={() => handleOpenAuthForm("signin")}
+                >
+                  Login
+                </CButton>
+                <CButton
+                  variant="outlined"
+                  onClick={() => handleOpenAuthForm("signup")}
+                >
+                  Sign up
+                </CButton>
               </>
             )}
           </div>
