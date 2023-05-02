@@ -16,6 +16,7 @@ import WifiIcon from "@mui/icons-material/Wifi";
 import LiveTvIcon from "@mui/icons-material/LiveTv";
 import RestaurantIcon from "@mui/icons-material/Restaurant";
 import { formatPrice } from "utils/helpers/formatPrice";
+import { formatQuantity } from "utils/helpers/formatQuantity";
 
 interface Props {
   data: ITicket;
@@ -32,26 +33,21 @@ const TicketDetail = (props: Props) => {
     classType,
     endDate,
     entertainment,
-    from,
+    fromLocation,
     meals,
     startDate,
-    to,
+    toLocation,
     type,
     wifi,
-    airplane,
+    airline,
     price,
   } = data;
 
-  const durationHrs = moment(endDate)
-    .add(12, "hours")
-    .add(20, "minutes")
-    .diff(moment(startDate), "hours");
-  const durationMins =
-    moment(endDate)
-      .add(12, "hours")
-      .add(20, "minutes")
-      .diff(moment(startDate), "minutes") % 60;
-  const duration = `${durationHrs}:${durationMins} hrs`;
+  const durationHrs = moment(endDate).diff(moment(startDate), "hours");
+  const durationMins = moment(endDate).diff(moment(startDate), "minutes") % 60;
+  const duration = `${formatQuantity(durationHrs)}:${formatQuantity(
+    durationMins
+  )} hrs`;
   const ticketProperties = [
     { included: wifi, value: "wifi", icon: <WifiIcon /> },
     {
@@ -70,7 +66,7 @@ const TicketDetail = (props: Props) => {
     { label: "Class", value: classType },
     {
       label: "Airline",
-      value: airlinesLogo[airplane].name,
+      value: airlinesLogo[airline].name,
     },
     { label: "Price", value: `${formatPrice(price)} USD` },
   ];
@@ -93,8 +89,12 @@ const TicketDetail = (props: Props) => {
             Duration: {duration}
           </div>
         </div>
-        <IconButton className="dialog-title__close p-0" disableRipple>
-          <CloseIcon onClick={handleClose} />
+        <IconButton
+          className="dialog-title__close p-0"
+          disableRipple
+          onClick={handleClose}
+        >
+          <CloseIcon />
         </IconButton>
       </DialogTitle>
       <DialogContent className="ticket-dialog-content">
@@ -112,8 +112,10 @@ const TicketDetail = (props: Props) => {
           </div>
 
           <div className="ticket-destination">
-            <span className="ticket-destination__departure">{from}</span>
-            <span>{to}</span>
+            <span className="ticket-destination__departure">
+              {fromLocation}
+            </span>
+            <span>{toLocation}</span>
           </div>
         </div>
 

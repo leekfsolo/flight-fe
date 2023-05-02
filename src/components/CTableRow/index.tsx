@@ -4,7 +4,7 @@ import { TableCell, TableRow, TableRowProps } from "@mui/material";
 interface Props extends TableRowProps {
   isSelected?: boolean;
   row: any;
-  handleClick: (id: string) => Promise<void>;
+  handleClick: (id: string) => void;
 }
 
 const CTableRow = (props: Props) => {

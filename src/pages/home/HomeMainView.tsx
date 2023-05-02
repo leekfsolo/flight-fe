@@ -21,7 +21,7 @@ interface Props {
   searchTicket: (data: ITicketData) => Promise<void>;
   ticketListData: any[];
   ticketListHeadCells: ITableHeadCell[];
-  handleSelectedTicket: (id: string) => Promise<void>;
+  handleSelectedTicket: (id: string) => void;
 }
 
 interface ISelectTicket {
@@ -43,8 +43,8 @@ const HomeMainView = (props: Props) => {
   const defaultValues: ITicketData = {
     type: ticketType[0].id,
     classType: ticketData[0].id,
-    from: "",
-    to: "",
+    fromLocation: "",
+    toLocation: "",
     startDate: moment(new Date()),
     endDate: moment(new Date()),
   };
@@ -58,8 +58,8 @@ const HomeMainView = (props: Props) => {
       label: "Destination",
       type: "text",
       groupInputData: [
-        { name: "from", placeholder: "Departure location" },
-        { name: "to", placeholder: "Arrival location" },
+        { name: "fromLocation", placeholder: "Departure location" },
+        { name: "toLocation", placeholder: "Arrival location" },
       ],
       control,
     },

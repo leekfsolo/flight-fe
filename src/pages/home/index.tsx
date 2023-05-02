@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import HomeMainView from "./HomeMainView";
 import {
   Bamboo,
@@ -16,9 +16,16 @@ import TicketDetail from "./TicketDetail";
 import { useNavigate } from "react-router-dom";
 import { PageUrl } from "configuration/enum";
 import moment from "moment";
+import { useAppDispatch, useAppSelector } from "app/hooks";
+import { getTrendTickets } from "./homeSlice";
+import { homeSelector } from "app/selectors";
+import { formatPrice } from "utils/helpers/formatPrice";
 
 const Home = () => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const home = useAppSelector(homeSelector);
+  const { ticketList } = home;
   const homeBanners: string[] = [Banner1, Banner2, Banner3, Banner4];
   const airlinesLogo: ILogo[] = [
     { name: "Vietnam Airlines", img: VietnamAirLine },
@@ -34,57 +41,6 @@ const Home = () => {
     { id: "economy", value: "economy class" },
     { id: "business", value: "business class" },
     { id: "first", value: "first class" },
-  ];
-  const ticketListData: any[] = [
-    {
-      from: "San Francisco (SFO)",
-      to: "Ho Chi Minh City (SGN)",
-      date: "23/08/2023 - 14/09/2023",
-      fare: "Round-trip / Economy",
-      price: "From $1,056",
-    },
-    {
-      from: "San Francisco (SFO)",
-      to: "Ho Chi Minh City (SGN)",
-      date: "23/08/2023 - 14/09/2023",
-      fare: "Round-trip / Economy",
-      price: "From $1,056",
-    },
-    {
-      from: "San Francisco (SFO)",
-      to: "Ho Chi Minh City (SGN)",
-      date: "23/08/2023 - 14/09/2023",
-      fare: "Round-trip / Economy",
-      price: "From $1,056",
-    },
-    {
-      from: "San Francisco (SFO)",
-      to: "Ho Chi Minh City (SGN)",
-      date: "23/08/2023 - 14/09/2023",
-      fare: "Round-trip / Economy",
-      price: "From $1,056",
-    },
-    {
-      from: "San Francisco (SFO)",
-      to: "Ho Chi Minh City (SGN)",
-      date: "23/08/2023 - 14/09/2023",
-      fare: "Round-trip / Economy",
-      price: "From $1,056",
-    },
-    {
-      from: "San Francisco (SFO)",
-      to: "Ho Chi Minh City (SGN)",
-      date: "23/08/2023 - 14/09/2023",
-      fare: "Round-trip / Economy",
-      price: "From $1,056",
-    },
-    {
-      from: "San Francisco (SFO)",
-      to: "Ho Chi Minh City (SGN)",
-      date: "23/08/2023 - 14/09/2023",
-      fare: "Round-trip / Economy",
-      price: "From $1,056",
-    },
   ];
   const ticketListHeadCells: ITableHeadCell[] = [
     {
@@ -119,33 +75,54 @@ const Home = () => {
     },
   ];
 
-  const handleSelectedTicket = async (id: string) => {
-    setIsOpenTicket(true);
-  };
-
   const searchTicket = async (data: ITicketData) => {};
 
   // Ticket detail
-  const [isOpenTicket, setIsOpenTicket] = useState<boolean>(false);
-  const handleCloseTicket = () => setIsOpenTicket(false);
+  const [selectedTicket, setSelectedTicket] = useState<string>("");
+
+  const handleSelectedTicket = (id: string) => {
+    setSelectedTicket(id);
+  };
+  const handleCloseTicket = () => setSelectedTicket("");
   const handleContinue = async (id: string) => {
     navigate(PageUrl.PAYMENT);
   };
+  const displayTicketList = ticketList.map((ticket) => {
+    const {
+      fromLocation,
+      toLocation,
+      startDate,
+      endDate,
+      type,
+      classType,
+      price,
+      id,
+    } = ticket;
 
-  const mockTicketData: ITicket = {
-    id: "test",
-    airplane: 0,
-    classType: "Economy",
-    endDate: moment(new Date()),
-    startDate: moment(new Date()),
-    from: "San Francisco (SFO)",
-    to: "Ho Chi Minh City (SGN)",
-    meals: 2,
-    entertainment: true,
-    wifi: true,
-    type: "round-trip",
-    price: 1035,
-  };
+    return {
+      id,
+      fromLocation,
+      toLocation,
+      dates: `${moment(startDate).format("DD/MM/YYYY HH:mm")} - ${moment(
+        endDate
+      ).format("DD/MM/YYYY HH:mm")}`,
+      fare: `${type} / ${classType}`,
+      price: `From $${formatPrice(price)}`,
+    };
+  });
+  const selectedTicketData = useMemo(() => {
+    return ticketList.find((ticket) => ticket.id === selectedTicket);
+  }, [selectedTicket]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      await dispatch(getTrendTickets());
+    };
+
+    fetchData();
+  }, []);
+
+  console.log(ticketList, selectedTicket);
 
   return (
     <>
@@ -156,16 +133,18 @@ const Home = () => {
         searchTicket={searchTicket}
         airlinesLogo={airlinesLogo}
         handleSelectedTicket={handleSelectedTicket}
-        ticketListData={ticketListData}
+        ticketListData={displayTicketList}
         ticketListHeadCells={ticketListHeadCells}
       />
-      <TicketDetail
-        data={mockTicketData}
-        handleClose={handleCloseTicket}
-        handleContinue={handleContinue}
-        open={isOpenTicket}
-        airlinesLogo={airlinesLogo}
-      />
+      {selectedTicketData && (
+        <TicketDetail
+          data={selectedTicketData}
+          handleClose={handleCloseTicket}
+          handleContinue={handleContinue}
+          open={selectedTicket !== ""}
+          airlinesLogo={airlinesLogo}
+        />
+      )}
     </>
   );
 };

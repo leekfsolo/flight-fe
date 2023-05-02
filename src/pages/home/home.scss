@@ -207,6 +207,10 @@
           font-weight: 500;
           color: $neutral-700;
         }
+
+        .info-value {
+          text-transform: capitalize;
+        }
       }
 
       .ticket-prop {
@@ -216,6 +220,7 @@
         display: flex;
         align-items: center;
         gap: 6px;
+        text-transform: capitalize;
 
         svg {
           color: $neutral-500;

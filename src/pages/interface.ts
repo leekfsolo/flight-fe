@@ -25,8 +25,8 @@ export interface BaseProps {
 export interface ITicketData {
   type: string;
   classType: string;
-  from: string;
-  to: string;
+  fromLocation: string;
+  toLocation: string;
   startDate: Moment;
   endDate: Moment;
 }
@@ -43,7 +43,7 @@ export interface ITicket extends ITicketData {
   wifi: boolean;
   meals: number;
   entertainment: boolean;
-  airplane: number;
+  airline: number;
   price: number;
 }
 

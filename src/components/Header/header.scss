@@ -30,17 +30,29 @@ header {
       position: relative;
 
       &--avatar {
-        max-width: 100px;
+        max-width: 160px;
+        height: 48px;
         text-overflow: ellipsis;
         overflow-x: hidden;
         white-space: nowrap;
         cursor: pointer;
         user-select: none;
+
+        .MuiChip-avatar {
+          height: 36px;
+          width: 36px;
+        }
+
+        .MuiChip-label {
+          font-size: 18px;
+          padding: 4px;
+          padding-left: 12px;
+        }
       }
 
       .account-dropdown {
-        width: 200px;
-        top: 40px;
+        width: 220px;
+        top: 55px;
         left: 0px;
         transform-origin: top left;
 
@@ -53,6 +65,8 @@ header {
           color: $neutral-550;
           font-size: 15px;
           cursor: pointer;
+          font-weight: 500;
+          text-transform: capitalize;
 
           &:last-child {
             border: 0;

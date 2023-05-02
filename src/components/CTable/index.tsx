@@ -9,7 +9,7 @@ interface Props {
   rowsPerPage?: number;
   data: any[];
   headCells: ITableHeadCell[];
-  handleClick: (id: string) => Promise<void>;
+  handleClick: (id: string) => void;
 }
 
 const CTable = (props: Props) => {
