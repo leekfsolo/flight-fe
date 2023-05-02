@@ -12,6 +12,7 @@ import {
   ILabelValue,
   IPassengersInput,
   IPaymentMethod,
+  ITicket,
 } from "pages/interface";
 import { useAppDispatch } from "app/hooks";
 import { handleLoading } from "app/globalSlice";
@@ -32,6 +33,7 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { useNavigate } from "react-router-dom";
 import CButton from "components/CButton";
 import { formatPrice } from "utils/helpers/formatPrice";
+import moment from "moment";
 
 interface Props {
   passengersInput: IPassengersInput[];
@@ -39,6 +41,7 @@ interface Props {
   handleSelectPaymentMethod: (value: number) => void;
   paymentMethodData: IPaymentMethod[];
   billData: ILabelValue[];
+  ticketData: ITicket;
 }
 
 const defaultValues: IBooking = {
@@ -59,6 +62,7 @@ const CartMainView = (props: Props) => {
     paymentMethod,
     paymentMethodData,
     billData,
+    ticketData,
   } = props;
   const {
     control,
@@ -73,6 +77,7 @@ const CartMainView = (props: Props) => {
   const errorFormHandler: SubmitErrorHandler<IBooking> = (_, event) => {
     event?.target.classList.add("wasvalidated");
   };
+  const { startDate, endDate, fromLocation, toLocation } = ticketData;
 
   return (
     <main className="cart">
@@ -95,7 +100,10 @@ const CartMainView = (props: Props) => {
           <div className="col-9 p-0 pe-3">
             <div className="cart-detail">
               <CartSection title="Passengers" order={1}>
-                <div className="row m-0 gap-3">
+                <div
+                  className="row m-0 justify-content-between"
+                  style={{ gap: "16px 0" }}
+                >
                   {passengersInput.map((input) => {
                     const { label, name, required } = input;
 
@@ -218,11 +226,13 @@ const CartMainView = (props: Props) => {
               <section className="cart-booking">
                 <h4>Your Booking</h4>
                 <div className="booking-detail">
-                  <p className="booking-date">Thu, May 4</p>
+                  <p className="booking-date">
+                    {moment(startDate).format("ddd, MMM D")}
+                  </p>
                   <div className="booking-summary">
                     <div className="date-range">
-                      <span>08:05 AM</span>
-                      <span>04:20 PM</span>
+                      <span>{moment(startDate).format("H:mm A")}</span>
+                      <span>{moment(endDate).format("H:mm A")}</span>
                     </div>
                     <div className="booking-timeline">
                       <div className="timeline-start"></div>
@@ -230,8 +240,8 @@ const CartMainView = (props: Props) => {
                       <div className="timeline-end"></div>
                     </div>
                     <div className="location-range">
-                      <span>Ho Chi Minh City (SGN)</span>
-                      <span>Hanoi (HAN)</span>
+                      <span>{fromLocation}</span>
+                      <span>{toLocation}</span>
                     </div>
                   </div>
                 </div>

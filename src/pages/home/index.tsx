@@ -20,7 +20,12 @@ import { useAppDispatch, useAppSelector } from "app/hooks";
 import { getTrendTickets } from "./homeSlice";
 import { authSelector, homeSelector } from "app/selectors";
 import { formatPrice } from "utils/helpers/formatPrice";
-import { handleFormOpenChange, handleFormTypeChange } from "app/globalSlice";
+import {
+  handleFormOpenChange,
+  handleFormTypeChange,
+  handleLoading,
+} from "app/globalSlice";
+import { addItemToCart, handleSaveTicketData } from "pages/cart/cartSlice";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -92,6 +97,13 @@ const Home = () => {
       dispatch(handleFormOpenChange(true));
       dispatch(handleFormTypeChange("signin"));
     } else {
+      dispatch(handleLoading(true));
+      const res: any = await dispatch(addItemToCart(id)).unwrap();
+      const { success, data } = res;
+      if (success) {
+        dispatch(handleSaveTicketData(data));
+      }
+      dispatch(handleLoading(false));
       navigate(PageUrl.CHECKOUT);
     }
   };
