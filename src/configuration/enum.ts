@@ -3,4 +3,5 @@ export enum PageUrl {
   PROFILE = "profile",
   CHECKOUT = "checkout",
   ALL = "*",
+  ACCOUNT = "account",
 }

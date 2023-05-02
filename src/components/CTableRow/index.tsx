@@ -4,7 +4,7 @@ import { TableCell, TableRow, TableRowProps } from "@mui/material";
 interface Props extends TableRowProps {
   isSelected?: boolean;
   row: any;
-  handleClick: (id: string) => void;
+  handleClick?: (id: string) => void;
 }
 
 const CTableRow = (props: Props) => {
@@ -14,11 +14,12 @@ const CTableRow = (props: Props) => {
   return (
     <TableRow
       hover
-      role="checkbox"
       aria-checked={isSelected}
       tabIndex={-1}
       selected={isSelected}
-      onClick={() => handleClick(id)}
+      onClick={() => {
+        if (handleClick) handleClick(id);
+      }}
       sx={{ cursor: "pointer" }}
     >
       {Object.keys(dataRow).map((key, idx) => {

@@ -9,6 +9,7 @@ import {
 } from "react-hook-form";
 import {
   IBooking,
+  IBookingData,
   ILabelValue,
   IPassengersInput,
   IPaymentMethod,
@@ -34,6 +35,9 @@ import { useNavigate } from "react-router-dom";
 import CButton from "components/CButton";
 import { formatPrice } from "utils/helpers/formatPrice";
 import moment from "moment";
+import { addBooking } from "./cartSlice";
+import customToast, { ToastType } from "components/CustomToast/customToast";
+import { PageUrl } from "configuration/enum";
 
 interface Props {
   passengersInput: IPassengersInput[];
@@ -68,11 +72,27 @@ const CartMainView = (props: Props) => {
     control,
     handleSubmit,
     formState: { errors },
-    watch,
+    setValue,
   } = useForm<IBooking>({ defaultValues });
   const submitFormHandler: SubmitHandler<IBooking> = async (data) => {
     // Just for test
     dispatch(handleLoading(true));
+    const { checked_in_luggage, ...restData } = data;
+    const bookingData: IBookingData = {
+      ...restData,
+      luggage: checked_in_luggage === "no" ? false : true,
+      ticketId: ticketData.id,
+    };
+
+    const res: any = await dispatch(addBooking(bookingData)).unwrap();
+    const { success, message } = res;
+    if (success) {
+      customToast(ToastType.SUCCESS, message);
+      navigate(`/${PageUrl.ACCOUNT}`);
+    } else {
+      customToast(ToastType.ERROR, message);
+    }
+    dispatch(handleLoading(false));
   };
   const errorFormHandler: SubmitErrorHandler<IBooking> = (_, event) => {
     event?.target.classList.add("wasvalidated");
@@ -211,7 +231,10 @@ const CartMainView = (props: Props) => {
                       className="payment-method"
                       key={data.name}
                       aria-selected={idx === paymentMethod}
-                      onClick={() => handleSelectPaymentMethod(idx)}
+                      onClick={() => {
+                        handleSelectPaymentMethod(idx);
+                        setValue("paymentMethod", idx);
+                      }}
                     >
                       <span>{data.name}</span>
                       {data.icon}

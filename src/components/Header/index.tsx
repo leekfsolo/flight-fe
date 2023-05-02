@@ -45,12 +45,12 @@ const Header = () => {
     {
       label: "Personal Information",
       icon: <PermContactCalendarIcon />,
-      path: PageUrl.HOME,
+      path: PageUrl.ACCOUNT,
     },
     {
       label: "My Account",
       icon: <BadgeIcon />,
-      path: PageUrl.HOME,
+      path: PageUrl.ACCOUNT,
     },
     {
       label: "Log out",

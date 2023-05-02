@@ -1,8 +1,9 @@
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import bookingApi from "api/bookingApi";
 import cartApi from "api/cartApi";
 import Config from "configuration";
 import moment from "moment";
-import { ITicket } from "pages/interface";
+import { IBookingData, ITicket } from "pages/interface";
 
 const initialState = (): { ticketData: ITicket } => {
   const auth = sessionStorage.getItem(Config.storageKey.cart);
@@ -37,6 +38,14 @@ export const addItemToCart = createAsyncThunk(
   "cart/addItemToCart",
   async (ticketId: string) => {
     const res = await cartApi.addItemToCart(ticketId);
+    return res;
+  }
+);
+
+export const addBooking = createAsyncThunk(
+  "cart/addBooking",
+  async (data: IBookingData) => {
+    const res = await bookingApi.addBooking(data);
     return res;
   }
 );

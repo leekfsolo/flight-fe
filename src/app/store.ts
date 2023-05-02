@@ -3,6 +3,7 @@ import authReducer from "pages/auth/authSlice";
 import globalReducer from "app/globalSlice";
 import homeReducer from "pages/home/homeSlice";
 import cartReducer from "pages/cart/cartSlice";
+import accountReducer from "pages/account/accountSlice";
 
 export const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ export const store = configureStore({
     auth: authReducer,
     home: homeReducer,
     cart: cartReducer,
+    account: accountReducer,
   },
 });
 

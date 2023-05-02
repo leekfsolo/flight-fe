@@ -61,6 +61,11 @@ export interface IBooking {
   checked_in_luggage: string;
 }
 
+export interface IBookingData extends Omit<IBooking, "checked_in_luggage"> {
+  ticketId: string;
+  luggage: boolean;
+}
+
 export interface IPassengersInput {
   name: keyof IBooking;
   label: string;

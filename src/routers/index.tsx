@@ -15,6 +15,7 @@ import Home from "pages/home";
 import AuthForm from "pages/auth/AuthForm";
 import Cart from "pages/cart";
 import ScrollToTop from "utils/helpers/ScrollToTop";
+import Account from "pages/account";
 
 const Routers = () => {
   return (
@@ -26,6 +27,7 @@ const Routers = () => {
       <Routes>
         <Route element={<PrivateRoute />}>
           <Route path={PageUrl.CHECKOUT} element={<Cart />} />
+          <Route path={PageUrl.ACCOUNT} element={<Account />} />
         </Route>
         <Route path={PageUrl.HOME} element={<Home />} />
         <Route

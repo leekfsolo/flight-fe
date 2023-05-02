@@ -15,4 +15,24 @@
       cursor: pointer;
     }
   }
+
+  .empty-row {
+    td {
+      text-align: center;
+
+      img {
+        height: 300px;
+        object-fit: cover;
+        display: block;
+        margin: 0 auto;
+        margin-bottom: 16px;
+      }
+
+      p {
+        color: $neutral-700;
+        font-size: 17px;
+        font-weight: 500;
+      }
+    }
+  }
 }

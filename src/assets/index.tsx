@@ -8,6 +8,7 @@ import VietnamAirLine from "./png/vietnam-airlines.png";
 import VietJet from "./png/Vietjet.png";
 import JetStar from "./png/jetstar.png";
 import Bamboo from "./png/bamboo.png";
+import EmptyAirplane from "./png/emptyPlane.png";
 
 import { ReactComponent as Paypal } from "./svg/PayPal.svg";
 
@@ -23,4 +24,5 @@ export {
   VietnamAirLine,
   VietJet,
   Paypal,
+  EmptyAirplane,
 };
