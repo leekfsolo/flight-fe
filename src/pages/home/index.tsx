@@ -11,21 +11,24 @@ import {
   VietnamAirLine,
 } from "assets";
 import { SelectDataType } from "utils/base/model";
-import { ILogo, ITableHeadCell, ITicket, ITicketData } from "pages/interface";
+import { ILogo, ITableHeadCell, ITicketData } from "pages/interface";
 import TicketDetail from "./TicketDetail";
 import { useNavigate } from "react-router-dom";
 import { PageUrl } from "configuration/enum";
 import moment from "moment";
 import { useAppDispatch, useAppSelector } from "app/hooks";
 import { getTrendTickets } from "./homeSlice";
-import { homeSelector } from "app/selectors";
+import { authSelector, homeSelector } from "app/selectors";
 import { formatPrice } from "utils/helpers/formatPrice";
+import { handleFormOpenChange, handleFormTypeChange } from "app/globalSlice";
 
 const Home = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const home = useAppSelector(homeSelector);
+  const auth = useAppSelector(authSelector);
   const { ticketList } = home;
+  const { user } = auth;
   const homeBanners: string[] = [Banner1, Banner2, Banner3, Banner4];
   const airlinesLogo: ILogo[] = [
     { name: "Vietnam Airlines", img: VietnamAirLine },
@@ -85,7 +88,12 @@ const Home = () => {
   };
   const handleCloseTicket = () => setSelectedTicket("");
   const handleContinue = async (id: string) => {
-    navigate(PageUrl.PAYMENT);
+    if (user === "") {
+      dispatch(handleFormOpenChange(true));
+      dispatch(handleFormTypeChange("signin"));
+    } else {
+      navigate(PageUrl.CHECKOUT);
+    }
   };
   const displayTicketList = ticketList.map((ticket) => {
     const {
@@ -121,8 +129,6 @@ const Home = () => {
 
     fetchData();
   }, []);
-
-  console.log(ticketList, selectedTicket);
 
   return (
     <>

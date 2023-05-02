@@ -51,3 +51,28 @@ export interface ILogo {
   name: string;
   img: string;
 }
+
+export interface IBooking {
+  firstname: string;
+  lastname: string;
+  email: string;
+  phone?: string;
+  paymentMethod: number;
+  checked_in_luggage: string;
+}
+
+export interface IPassengersInput {
+  name: keyof IBooking;
+  label: string;
+  required?: boolean;
+}
+
+export interface IPaymentMethod {
+  icon: ReactNode;
+  name: string;
+}
+
+export interface ILabelValue {
+  label: string;
+  value: number;
+}

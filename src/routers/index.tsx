@@ -13,15 +13,20 @@ import Header from "components/Header";
 import Footer from "components/Footer";
 import Home from "pages/home";
 import AuthForm from "pages/auth/AuthForm";
+import Cart from "pages/cart";
+import ScrollToTop from "utils/helpers/ScrollToTop";
 
 const Routers = () => {
   return (
     <Router>
+      <ScrollToTop />
       <ToastContainer theme="colored" />
       <AuthForm />
       <Header />
       <Routes>
-        <Route element={<PrivateRoute />}></Route>
+        <Route element={<PrivateRoute />}>
+          <Route path={PageUrl.CHECKOUT} element={<Cart />} />
+        </Route>
         <Route path={PageUrl.HOME} element={<Home />} />
         <Route
           path={PageUrl.ALL}

@@ -8,6 +8,8 @@ import WrapperContainer from "components/WrapperContainer";
 import { useAppDispatch } from "app/hooks";
 import { handleFormOpenChange, handleFormTypeChange } from "app/globalSlice";
 import CustomDropdown from "components/CustomDropdown/CustomDropdown";
+import { useNavigate } from "react-router-dom";
+import { PageUrl } from "configuration/enum";
 
 interface Props {
   user?: string;
@@ -21,6 +23,7 @@ interface Props {
 
 const HeaderMainView = (props: Props) => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const {
     user,
     accountDropdownData,
@@ -40,7 +43,7 @@ const HeaderMainView = (props: Props) => {
     <header>
       <WrapperContainer>
         <div className="header">
-          <div className="header-logo">
+          <div className="header-logo" onClick={() => navigate(PageUrl.HOME)}>
             <img src={Logo} alt="flight booking logo" />
           </div>
 

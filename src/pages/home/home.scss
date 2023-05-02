@@ -1,6 +1,8 @@
 @use "styles/index" as *;
 
 .home {
+  padding-bottom: 40px;
+
   &-banner {
     height: calc(100vh - 80px);
     position: relative;

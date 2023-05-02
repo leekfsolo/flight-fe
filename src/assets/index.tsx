@@ -9,6 +9,8 @@ import VietJet from "./png/Vietjet.png";
 import JetStar from "./png/jetstar.png";
 import Bamboo from "./png/bamboo.png";
 
+import { ReactComponent as Paypal } from "./svg/PayPal.svg";
+
 export {
   Hero,
   Logo,
@@ -20,4 +22,5 @@ export {
   JetStar,
   VietnamAirLine,
   VietJet,
+  Paypal,
 };
