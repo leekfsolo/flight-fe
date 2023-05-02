@@ -1,0 +1,28 @@
+@use "styles/index" as *;
+
+.ctable-container {
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+
+  .MuiTableCell-root {
+    > span {
+      white-space: nowrap;
+      font-size: 16px;
+    }
+
+    .cell-variant {
+      color: white;
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 500;
+      display: inline-block;
+      text-align: center;
+      text-transform: capitalize;
+    }
+
+    svg {
+      cursor: pointer;
+    }
+  }
+}

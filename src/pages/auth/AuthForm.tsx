@@ -109,7 +109,7 @@ const AuthForm = () => {
         ? {}
         : {
             validate: (value: string) =>
-              /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(value) ||
+              /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(value) ||
               "Invalid email address",
           },
     },

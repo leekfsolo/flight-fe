@@ -13,7 +13,7 @@ const PrivateRoute = () => {
   return token && jwtDecode(token) ? (
     <Outlet />
   ) : (
-    <Navigate to={PageUrl.LOGIN} state={{ from: location }} replace />
+    <Navigate to={PageUrl.HOME} state={{ from: location }} replace />
   );
 };
 

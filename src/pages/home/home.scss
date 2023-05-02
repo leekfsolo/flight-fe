@@ -118,3 +118,114 @@
     }
   }
 }
+
+.ticket-dialog {
+  .MuiPaper-root {
+    max-width: 550px;
+  }
+
+  &-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 20px;
+    border-bottom: 1px solid $neutral-300;
+
+    .ticket-date {
+      font-weight: 700;
+      font-size: 18px;
+    }
+
+    .ticket-extra {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      color: $neutral-500;
+      font-size: 14px;
+
+      svg {
+        font-size: 18px;
+        position: relative;
+        top: 1px;
+      }
+    }
+  }
+
+  &-content {
+    padding: 20px 24px;
+    padding-top: 16px !important;
+
+    .timeline-wrapper {
+      .ticket-timeline {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 8px;
+
+        &__value {
+          font-weight: 600;
+          color: $neutral-900;
+          font-size: 18px;
+        }
+
+        &__duration {
+          font-weight: 600;
+          color: $info-700;
+          font-size: 16px;
+        }
+
+        &--divider {
+          height: 1px;
+          flex: 1;
+          background-color: $neutral-300;
+          margin: 0 8px;
+        }
+      }
+
+      .ticket-destination {
+        display: flex;
+        align-items: center;
+
+        &__departure {
+          flex: 1;
+        }
+      }
+    }
+
+    .ticket-detail {
+      img {
+        object-fit: cover;
+        height: 80px;
+      }
+
+      &__info {
+        display: flex;
+        align-items: center;
+
+        .info-label {
+          flex-basis: 80px;
+          font-weight: 500;
+          color: $neutral-700;
+        }
+      }
+
+      .ticket-prop {
+        background-color: $neutral-200;
+        border-radius: 4px;
+        padding: 8px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+
+        svg {
+          color: $neutral-500;
+          font-size: 18px;
+        }
+      }
+    }
+  }
+
+  &-actions {
+    padding: 12px 20px;
+  }
+}

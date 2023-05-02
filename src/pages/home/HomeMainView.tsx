@@ -1,7 +1,7 @@
 import CButton from "components/CButton";
 import CSelect from "components/CSelect";
 import WrapperContainer from "components/WrapperContainer";
-import { ITicketData } from "pages/interface";
+import { ILogo, ITableHeadCell, ITicketData } from "pages/interface";
 import React from "react";
 import { useForm, Controller } from "react-hook-form";
 import { Autoplay, Pagination, EffectFade } from "swiper";
@@ -11,13 +11,17 @@ import SearchIcon from "@mui/icons-material/Search";
 import GroupInput, { GroupInputProps } from "components/GroupInput/GroupInput";
 import moment from "moment";
 import { FormControl } from "@mui/material";
+import CTable from "components/CTable";
 
 interface Props {
   bannerList: string[];
-  airlinesLogo: string[];
+  airlinesLogo: ILogo[];
   ticketType: SelectDataType[];
   ticketData: SelectDataType[];
   searchTicket: (data: ITicketData) => Promise<void>;
+  ticketListData: any[];
+  ticketListHeadCells: ITableHeadCell[];
+  handleSelectedTicket: (id: string) => Promise<void>;
 }
 
 interface ISelectTicket {
@@ -26,11 +30,19 @@ interface ISelectTicket {
 }
 
 const HomeMainView = (props: Props) => {
-  const { bannerList, ticketData, ticketType, searchTicket, airlinesLogo } =
-    props;
+  const {
+    bannerList,
+    ticketData,
+    ticketType,
+    searchTicket,
+    airlinesLogo,
+    handleSelectedTicket,
+    ticketListData,
+    ticketListHeadCells,
+  } = props;
   const defaultValues: ITicketData = {
     type: ticketType[0].id,
-    data: ticketData[0].id,
+    classType: ticketData[0].id,
     from: "",
     to: "",
     startDate: moment(new Date()),
@@ -39,7 +51,7 @@ const HomeMainView = (props: Props) => {
   const { control, handleSubmit } = useForm({ defaultValues });
   const selectTicket: ISelectTicket[] = [
     { name: "type", options: ticketType },
-    { name: "data", options: ticketData },
+    { name: "classType", options: ticketData },
   ];
   const filterTicket: GroupInputProps[] = [
     {
@@ -137,7 +149,7 @@ const HomeMainView = (props: Props) => {
             <div className="logo-list">
               {airlinesLogo.map((logo, idx) => (
                 <div className="logo-wrapper" key={idx}>
-                  <img src={logo} alt="" />
+                  <img src={logo.img} alt="" />
                 </div>
               ))}
             </div>
@@ -146,7 +158,22 @@ const HomeMainView = (props: Props) => {
 
         <WrapperContainer>
           <section className="home-flight">
-            <h4>Offers for Trending Flights</h4>
+            <h4 className="mb-4">Offers for Trending Flights</h4>
+
+            <div className="home-flight-list">
+              <CTable
+                data={ticketListData}
+                handleClick={handleSelectedTicket}
+                headCells={ticketListHeadCells}
+              />
+            </div>
+            <div className="home-flight--support mt-4">
+              <span>
+                *Fares displayed have been collected within the last 48hrs and
+                may no longer be available at time of booking. Additional fees
+                and charges for optional products and services may apply.
+              </span>
+            </div>
           </section>
         </WrapperContainer>
       </main>

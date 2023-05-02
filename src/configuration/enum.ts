@@ -1,7 +1,6 @@
 export enum PageUrl {
   HOME = "",
-  LOGIN = "login",
   PROFILE = "profile",
-  DASHBOARD = "dashboard",
+  PAYMENT = "payment",
   ALL = "*",
 }
