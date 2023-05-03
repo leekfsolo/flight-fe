@@ -11,4 +11,4 @@
 
 ## Activity Diagram
 
-![Activity Diagram](/src/assets/docs/activity.png)
+![Activity Diagram](/src/assets/docs/activityDiagram.png)
