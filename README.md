@@ -1,4 +1,4 @@
-# FLight Booking Frontend Server
+# FLight Booking Frontend
 
 ## How to run the application?
 
