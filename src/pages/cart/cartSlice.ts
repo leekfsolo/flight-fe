@@ -1,4 +1,4 @@
-import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import bookingApi from "api/bookingApi";
 import cartApi from "api/cartApi";
 import Config from "configuration";
@@ -28,6 +28,22 @@ const initialState = (): { ticketData: ITicket } => {
     },
   };
 };
+
+export const createPaypalOrder = createAsyncThunk(
+  "cart/create-paypal-order",
+  async (data: any) => {
+    const res = await cartApi.createPaypalOrder(data);
+    return res;
+  }
+);
+
+export const approvePaypalOrder = createAsyncThunk(
+  "cart/approve-paypal-order",
+  async (data: { orderId: string }) => {
+    const res = await cartApi.approvePaypalOrder(data);
+    return res;
+  }
+);
 
 export const getCartItems = createAsyncThunk("cart/getCartItems", async () => {
   const res = await cartApi.getCartItems();

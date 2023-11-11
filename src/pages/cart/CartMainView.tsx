@@ -1,5 +1,5 @@
-import WrapperContainer from "components/WrapperContainer";
 import React from "react";
+import WrapperContainer from "components/WrapperContainer";
 import CartSection from "./CartSection";
 import {
   Controller,
@@ -35,9 +35,11 @@ import { useNavigate } from "react-router-dom";
 import CButton from "components/CButton";
 import { formatPrice } from "utils/helpers/formatPrice";
 import moment from "moment";
-import { addBooking } from "./cartSlice";
+import { addBooking, approvePaypalOrder, createPaypalOrder } from "./cartSlice";
 import customToast, { ToastType } from "components/CustomToast/customToast";
 import { PageUrl } from "configuration/enum";
+import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
+import { OnApproveData } from "@paypal/paypal-js";
 
 interface Props {
   passengersInput: IPassengersInput[];
@@ -73,9 +75,10 @@ const CartMainView = (props: Props) => {
     handleSubmit,
     formState: { errors },
     setValue,
+    watch,
+    getValues,
   } = useForm<IBooking>({ defaultValues });
   const submitFormHandler: SubmitHandler<IBooking> = async (data) => {
-    // Just for test
     dispatch(handleLoading(true));
     const { checked_in_luggage, ...restData } = data;
     const bookingData: IBookingData = {
@@ -98,6 +101,48 @@ const CartMainView = (props: Props) => {
     event?.target.classList.add("wasvalidated");
   };
   const { startDate, endDate, fromLocation, toLocation } = ticketData;
+  const isPaidWithPaypal = watch("paymentMethod") === 3;
+
+  const createOrder = async () => {
+    try {
+      const paypalData = {
+        purchase_units: [
+          {
+            amount: {
+              currency_code: "USD",
+              value: billData[3].value,
+            },
+          },
+        ],
+        intent: "CAPTURE",
+      };
+      const response: any = await dispatch(
+        createPaypalOrder(paypalData)
+      ).unwrap();
+
+      return response.id;
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const onApprove = async (data: OnApproveData) => {
+    try {
+      const paypalData: { orderId: string } = {
+        orderId: data.orderID,
+      };
+      const response: any = await dispatch(
+        approvePaypalOrder(paypalData)
+      ).unwrap();
+
+      if (response && response.status === "COMPLETED") {
+        const data = getValues();
+        submitFormHandler(data);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   return (
     <main className="cart">
@@ -159,7 +204,7 @@ const CartMainView = (props: Props) => {
                           )}
                         />
                         {!!errors[name] && (
-                          <FormHelperText error>
+                          <FormHelperText className="ms-0" error>
                             {errors[name]?.message}
                           </FormHelperText>
                         )}
@@ -286,9 +331,22 @@ const CartMainView = (props: Props) => {
                     </div>
                   ))}
                 </div>
-                <CButton type="submit" className="w-100">
-                  Proceed Payment
-                </CButton>
+                {isPaidWithPaypal ? (
+                  <PayPalScriptProvider
+                    options={{
+                      clientId: process.env.REACT_APP_PAYPAL_CLIENT_ID || "",
+                    }}
+                  >
+                    <PayPalButtons
+                      createOrder={createOrder}
+                      onApprove={onApprove}
+                    />
+                  </PayPalScriptProvider>
+                ) : (
+                  <CButton type="submit" className="w-100">
+                    Proceed Payment
+                  </CButton>
+                )}
               </section>
             </div>
           </div>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import CartMainView from "./CartMainView";
 import {
   ILabelValue,
@@ -10,11 +10,10 @@ import LocalAtmIcon from "@mui/icons-material/LocalAtm";
 import CreditCardIcon from "@mui/icons-material/CreditCard";
 import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
 import { Paypal } from "assets";
-import { useAppDispatch, useAppSelector } from "app/hooks";
+import { useAppSelector } from "app/hooks";
 import { cartSelector } from "app/selectors";
 
 const Cart = () => {
-  const dispatch = useAppDispatch();
   const cart = useAppSelector(cartSelector);
   const ticketData = cart.ticketData as ITicket;
   const passengersInput: IPassengersInput[] = [
@@ -35,7 +34,7 @@ const Cart = () => {
     },
     {
       name: "phone",
-      required: false,
+      required: true,
       label: "Phone number",
     },
   ];

@@ -132,7 +132,7 @@ const Home = () => {
   });
   const selectedTicketData = useMemo(() => {
     return ticketList.find((ticket) => ticket.id === selectedTicket);
-  }, [selectedTicket]);
+  }, [selectedTicket, ticketList]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -140,7 +140,7 @@ const Home = () => {
     };
 
     fetchData();
-  }, []);
+  }, [dispatch]);
 
   return (
     <>
