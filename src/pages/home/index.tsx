@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import HomeMainView from "./HomeMainView";
 import {
   Bamboo,
@@ -11,7 +11,7 @@ import {
   VietnamAirLine,
 } from "assets";
 import { SelectDataType } from "utils/base/model";
-import { ILogo, ITableHeadCell, ITicketData } from "pages/interface";
+import { ILogo, ITicketData } from "pages/interface";
 import TicketDetail from "./TicketDetail";
 import { useNavigate } from "react-router-dom";
 import { PageUrl } from "configuration/enum";
@@ -50,38 +50,6 @@ const Home = () => {
     { id: "business", value: "business class" },
     { id: "first", value: "first class" },
   ];
-  const ticketListHeadCells: ITableHeadCell[] = [
-    {
-      id: "from",
-      label: "From",
-      align: "left",
-      padding: "normal",
-    },
-    {
-      id: "to",
-      label: "To",
-      align: "left",
-      padding: "normal",
-    },
-    {
-      id: "date",
-      label: "Dates",
-      align: "left",
-      padding: "normal",
-    },
-    {
-      id: "fare",
-      label: "Fare Type",
-      align: "left",
-      padding: "normal",
-    },
-    {
-      id: "price",
-      label: "Price",
-      align: "left",
-      padding: "normal",
-    },
-  ];
 
   const searchTicket = async (data: ITicketData) => {};
 
@@ -107,7 +75,7 @@ const Home = () => {
       navigate(PageUrl.CHECKOUT);
     }
   };
-  const displayTicketList = ticketList.map((ticket) => {
+  const flightTicketList = ticketList.map((ticket) => {
     const {
       fromLocation,
       toLocation,
@@ -151,8 +119,8 @@ const Home = () => {
         searchTicket={searchTicket}
         airlinesLogo={airlinesLogo}
         handleSelectedTicket={handleSelectedTicket}
-        ticketListData={displayTicketList}
-        ticketListHeadCells={ticketListHeadCells}
+        flightListData={flightTicketList}
+        handleTicketContinue={handleContinue}
       />
       {selectedTicketData && (
         <TicketDetail

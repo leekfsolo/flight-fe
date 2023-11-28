@@ -1,8 +1,7 @@
 import CButton from "components/CButton";
 import CSelect from "components/CSelect";
 import WrapperContainer from "components/WrapperContainer";
-import { ILogo, ITableHeadCell, ITicketData } from "pages/interface";
-import React from "react";
+import { ILogo, ITicketData } from "pages/interface";
 import { useForm, Controller } from "react-hook-form";
 import { Autoplay, Pagination, EffectFade } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -11,7 +10,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import GroupInput, { GroupInputProps } from "components/GroupInput/GroupInput";
 import moment from "moment";
 import { FormControl } from "@mui/material";
-import CTable from "components/CTable";
+import CCardList from "components/CCardList";
 
 interface Props {
   bannerList: string[];
@@ -19,9 +18,9 @@ interface Props {
   ticketType: SelectDataType[];
   ticketData: SelectDataType[];
   searchTicket: (data: ITicketData) => Promise<void>;
-  ticketListData: any[];
-  ticketListHeadCells: ITableHeadCell[];
+  flightListData: any[];
   handleSelectedTicket: (id: string) => void;
+  handleTicketContinue: (id: string) => Promise<void>;
 }
 
 interface ISelectTicket {
@@ -37,8 +36,8 @@ const HomeMainView = (props: Props) => {
     searchTicket,
     airlinesLogo,
     handleSelectedTicket,
-    ticketListData,
-    ticketListHeadCells,
+    flightListData,
+    handleTicketContinue,
   } = props;
   const defaultValues: ITicketData = {
     type: ticketType[0].id,
@@ -75,8 +74,8 @@ const HomeMainView = (props: Props) => {
   ];
 
   return (
-    <div className="home">
-      <div className="home-banner">
+    <div className='home'>
+      <div className='home-banner'>
         <Swiper
           spaceBetween={30}
           effect={"fade"}
@@ -91,26 +90,26 @@ const HomeMainView = (props: Props) => {
         >
           {bannerList.map((value, idx) => (
             <SwiperSlide key={idx}>
-              <img src={value} alt="" />
+              <img src={value} alt='' />
             </SwiperSlide>
           ))}
         </Swiper>
-        <div className="home-banner__content">
+        <div className='home-banner__content'>
           <p>Let's travel the world with us</p>
           <h1>Discover the world with our guide</h1>
         </div>
 
-        <div className="home-banner__search">
-          <div className="search-wrapper">
+        <div className='home-banner__search'>
+          <div className='search-wrapper'>
             <form
-              action="#"
-              method="POST"
+              action='#'
+              method='POST'
               noValidate
               onSubmit={handleSubmit(searchTicket)}
             >
-              <div className="d-flex align-items-center gap-3 mb-4">
+              <div className='d-flex align-items-center gap-3 mb-4'>
                 {selectTicket.map((value) => (
-                  <FormControl className="select-form-control" key={value.name}>
+                  <FormControl className='select-form-control' key={value.name}>
                     <Controller
                       key={value.name}
                       name={value.name}
@@ -124,7 +123,7 @@ const HomeMainView = (props: Props) => {
               </div>
 
               <div
-                className="d-flex align-items-center gap-3"
+                className='d-flex align-items-center gap-3'
                 style={{ height: "48px" }}
               >
                 {filterTicket.map((data, idx) => (
@@ -132,7 +131,7 @@ const HomeMainView = (props: Props) => {
                 ))}
                 <CButton
                   sx={{ height: "48px" }}
-                  className="d-flex align-items-center gap-1"
+                  className='d-flex align-items-center gap-1'
                 >
                   <SearchIcon />
                   Search
@@ -144,12 +143,12 @@ const HomeMainView = (props: Props) => {
       </div>
 
       <main>
-        <section className="home-logos">
+        <section className='home-logos'>
           <WrapperContainer>
-            <div className="logo-list">
+            <div className='logo-list'>
               {airlinesLogo.map((logo, idx) => (
-                <div className="logo-wrapper" key={idx}>
-                  <img src={logo.img} alt="" />
+                <div className='logo-wrapper' key={idx}>
+                  <img src={logo.img} alt='' />
                 </div>
               ))}
             </div>
@@ -157,17 +156,17 @@ const HomeMainView = (props: Props) => {
         </section>
 
         <WrapperContainer>
-          <section className="home-flight">
-            <h4 className="mb-4">Offers for Trending Flights</h4>
+          <section className='home-flight'>
+            <h4 className='mb-4'>Offers for Trending Flights</h4>
 
-            <div className="home-flight-list">
-              <CTable
-                data={ticketListData}
-                handleClick={handleSelectedTicket}
-                headCells={ticketListHeadCells}
+            <div className='home-flight-list'>
+              <CCardList
+                data={flightListData}
+                handleDetailClick={handleSelectedTicket}
+                handleBuyClick={handleTicketContinue}
               />
             </div>
-            <div className="home-flight--support mt-4">
+            <div className='home-flight--support mt-4'>
               <span>
                 *Fares displayed have been collected within the last 48hrs and
                 may no longer be available at time of booking. Additional fees

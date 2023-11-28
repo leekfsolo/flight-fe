@@ -42,35 +42,40 @@ const HeaderMainView = (props: Props) => {
   return (
     <header>
       <WrapperContainer>
-        <div className="header">
-          <div className="header-logo" onClick={() => navigate(PageUrl.HOME)}>
-            <img src={Logo} alt="flight booking logo" />
+        <div className='header'>
+          <div className='header-logo' onClick={() => navigate(PageUrl.HOME)}>
+            <img
+              src={Logo}
+              alt='flight booking logo'
+              width={150}
+              height={150}
+            />
           </div>
 
-          <div className="header-account">
+          <div className='header-account'>
             {user ? (
-              <div className="header-account__wrapper" onClick={toggleDropdown}>
+              <div className='header-account__wrapper' onClick={toggleDropdown}>
                 <Chip
                   avatar={
                     <Avatar
                       alt={user}
-                      src="https://png.pngtree.com/png-vector/20190710/ourmid/pngtree-user-vector-avatar-png-image_1541962.jpg"
+                      src='https://png.pngtree.com/png-vector/20190710/ourmid/pngtree-user-vector-avatar-png-image_1541962.jpg'
                     />
                   }
-                  className="header-account--avatar"
+                  className='header-account--avatar'
                   label={user}
-                  variant="outlined"
+                  variant='outlined'
                 />
 
                 <CustomDropdown
                   closeDropdown={closeAccountDropdown}
                   dropdownState={accountDropdownDataState}
                   ref={accountDropdownRef}
-                  className="account-dropdown"
+                  className='account-dropdown'
                 >
                   {accountDropdownData.map((data: any) => (
                     <div
-                      className="account-dropdown__item"
+                      className='account-dropdown__item'
                       key={data.label}
                       onClick={() => navigateTo(data.path)}
                     >
@@ -83,13 +88,13 @@ const HeaderMainView = (props: Props) => {
             ) : (
               <>
                 <CButton
-                  variant="text"
+                  variant='text'
                   onClick={() => handleOpenAuthForm("signin")}
                 >
                   Login
                 </CButton>
                 <CButton
-                  variant="outlined"
+                  variant='outlined'
                   onClick={() => handleOpenAuthForm("signup")}
                 >
                   Sign up
