@@ -1,74 +1,50 @@
 import {
+  Box,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
+  Grid,
   IconButton,
+  Rating,
+  Typography,
 } from "@mui/material";
 import CButton from "components/CButton";
-import { ILogo, ITicket } from "pages/interface";
+import { IVoucherDisplay } from "pages/interface";
 import React from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import moment from "moment";
-import AccessTimeIcon from "@mui/icons-material/AccessTime";
-import WifiIcon from "@mui/icons-material/Wifi";
-import LiveTvIcon from "@mui/icons-material/LiveTv";
-import RestaurantIcon from "@mui/icons-material/Restaurant";
-import { formatPrice } from "utils/helpers/formatPrice";
-import { formatQuantity } from "utils/helpers/formatQuantity";
+import TypeSpecimenIcon from "@mui/icons-material/TypeSpecimen";
 
 interface Props {
-  data: ITicket;
+  data: IVoucherDisplay;
   open: boolean;
   handleClose: () => void;
   handleContinue: (id: string) => Promise<void>;
-  airlinesLogo: ILogo[];
 }
 
 const TicketDetail = (props: Props) => {
-  const { data, handleClose, handleContinue, open, airlinesLogo } = props;
+  const { data, handleClose, handleContinue, open } = props;
   const {
     id,
-    classType,
-    endDate,
-    entertainment,
-    fromLocation,
-    meals,
-    startDate,
-    toLocation,
-    type,
-    wifi,
-    airline,
-    price,
+    voucherCode,
+    expirationDate,
+    numberOfProduct,
+    status,
+    originalPrice,
+    salePrice,
+    category,
+    brand,
+    location,
+    description,
+    image,
   } = data;
 
-  const durationHrs = moment(endDate).diff(moment(startDate), "hours");
-  const durationMins = moment(endDate).diff(moment(startDate), "minutes") % 60;
-  const duration = `${formatQuantity(durationHrs)}:${formatQuantity(
-    durationMins
-  )} hrs`;
-  const ticketProperties = [
-    { included: wifi, value: "wifi", icon: <WifiIcon /> },
-    {
-      included: entertainment,
-      value: "Onboard Entertainment",
-      icon: <LiveTvIcon />,
-    },
-    {
-      included: meals > 0,
-      value: `Meals service (${meals})`,
-      icon: <RestaurantIcon />,
-    },
-  ].filter((data) => data.included);
   const ticketData = [
-    { label: "Type", value: type },
-    { label: "Class", value: classType },
-    {
-      label: "Airline",
-      value: airlinesLogo[airline].name,
-    },
-    { label: "Price", value: `${formatPrice(price)} USD` },
+    { label: "Experiation Date", value: expirationDate },
+    { label: "Amount", value: numberOfProduct },
+    { label: "Location", value: location },
+    { label: "Status", value: status },
   ];
 
   return (
@@ -76,72 +52,92 @@ const TicketDetail = (props: Props) => {
       open={open}
       onClose={handleClose}
       fullWidth={true}
-      maxWidth="xs"
-      className="ticket-dialog"
+      maxWidth='xl'
+      className='ticket-dialog'
     >
-      <DialogTitle className="ticket-dialog-title" id="alert-dialog-title">
-        <div className="ticket-overview">
-          <div className="ticket-date">
-            {moment(startDate).format("ddd, MMM D")}
-          </div>
-          <div className="ticket-extra">
-            <AccessTimeIcon />
-            Duration: {duration}
+      <DialogTitle className='ticket-dialog-title' id='alert-dialog-title'>
+        <div className='ticket-overview'>
+          <div className='ticket-date'>{brand}</div>
+          <div className='ticket-extra'>
+            <TypeSpecimenIcon />
+            Category: {category}
           </div>
         </div>
         <IconButton
-          className="dialog-title__close p-0"
+          className='dialog-title__close p-0'
           disableRipple
           onClick={handleClose}
         >
           <CloseIcon />
         </IconButton>
       </DialogTitle>
-      <DialogContent className="ticket-dialog-content">
-        <div className="timeline-wrapper">
-          <div className="ticket-timeline">
-            <div className="ticket-timeline__value">
-              {moment(startDate).format("H:mm A")}
-            </div>
-            <div className="ticket-timeline--divider"></div>
-            <div className="ticket-timeline__duration">{duration}</div>
-            <div className="ticket-timeline--divider"></div>
-            <div className="ticket-timeline__value">
-              {moment(endDate).format("H:mm A")}
-            </div>
-          </div>
-
-          <div className="ticket-destination">
-            <span className="ticket-destination__departure">
-              {fromLocation}
-            </span>
-            <span>{toLocation}</span>
-          </div>
-        </div>
-
-        <div className="ticket-detail">
-          <div className="d-flex flex-column gap-4 my-4">
-            {ticketData.map((data) => (
-              <div key={data.label} className="ticket-detail__info">
-                <span className="info-label">{data.label}:</span>
-                <span className="info-value">{data.value}</span>
+      <DialogContent className='ticket-dialog-content'>
+        <Grid container spacing={2} alignItems='center'>
+          <Grid item xs={8}>
+            <Box
+              component='img'
+              alt='image relating to voucher'
+              src={image}
+              sx={{
+                width: "100%",
+                height: "250px",
+                borderRadius: "3%",
+              }}
+            ></Box>
+          </Grid>
+          <Grid item xs={4}>
+            <div className='ticket-detail'>
+              <div className='d-flex flex-column gap-4 my-4'>
+                {ticketData.map((data) => (
+                  <div key={data.label} className='ticket-detail__info'>
+                    <span className='info-label'>{data.label}:</span>
+                    <span className='info-value'>{data.value}</span>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-
-          <div className="d-flex align-items-center gap-2 flex-wrap">
-            {ticketProperties.map((prop, idx) => (
-              <div className="ticket-prop" key={idx}>
-                {prop.icon}
-                <span>{prop.value}</span>
-              </div>
-            ))}
-          </div>
-        </div>
+            </div>
+          </Grid>
+        </Grid>
+        <Grid container spacing={2} alignItems='center'>
+          <Grid item xs={8}>
+            <Rating name='read-only' value={2} readOnly sx={{ m: 2 }} />
+            <Typography
+              variant='body1'
+              color='text.secondary'
+              sx={{ textAlign: "justify" }}
+            >
+              <span>Description: </span>
+              {description}
+            </Typography>
+          </Grid>
+          <Grid item xs={4}>
+            <Grid container spacing={2} alignItems='center'>
+              <Grid item xs={4}>
+                <Typography
+                  sx={{ textDecoration: "line-through" }}
+                  variant='h6'
+                  color='text.disabled'
+                  alignSelf='center'
+                >
+                  ${originalPrice}
+                </Typography>
+              </Grid>
+              <Grid item xs={8}>
+                <Typography
+                  variant='h4'
+                  color='success.main'
+                  alignSelf='center'
+                >
+                  ${salePrice}
+                </Typography>
+              </Grid>
+            </Grid>
+          </Grid>
+        </Grid>
       </DialogContent>
-      <DialogActions className="ticket-dialog-actions">
+      <DialogActions className='ticket-dialog-actions'>
         <CButton
-          className="d-flex align-items-center gap-1"
+          className='d-flex align-items-center gap-1'
           onClick={() => handleContinue(id)}
           sx={{ paddingX: "14px !important" }}
         >

@@ -3,28 +3,28 @@ import bookingApi from "api/bookingApi";
 import cartApi from "api/cartApi";
 import Config from "configuration";
 import moment from "moment";
-import { IBookingData, ITicket } from "pages/interface";
+import { IBookingData, IVoucher } from "pages/interface";
 
-const initialState = (): { ticketData: ITicket } => {
+const initialState = (): { voucherData: IVoucher } => {
   const auth = sessionStorage.getItem(Config.storageKey.cart);
   if (auth) {
     return { ...JSON.parse(auth) };
   }
 
   return {
-    ticketData: {
-      airline: 0,
-      classType: "",
-      endDate: moment(new Date()),
-      startDate: moment(new Date()),
-      entertainment: false,
+    voucherData: {
       id: "",
-      meals: 0,
-      fromLocation: "",
-      price: 0,
-      toLocation: "",
-      type: "",
-      wifi: false,
+      voucherCode: "",
+      expirationDate: moment(),
+      numberOfProduct: 0,
+      status: "",
+      originalPrice: 0,
+      salePrice: 0,
+      category: "",
+      brand: "",
+      location: "",
+      description: [],
+      image: "",
     },
   };
 };
@@ -71,7 +71,7 @@ const cart = createSlice({
   initialState,
   reducers: {
     handleSaveTicketData: (state, action) => {
-      state.ticketData = action.payload;
+      state.voucherData = action.payload;
       sessionStorage.setItem(Config.storageKey.cart, JSON.stringify(state));
     },
   },

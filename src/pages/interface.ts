@@ -47,6 +47,25 @@ export interface ITicket extends ITicketData {
   price: number;
 }
 
+export interface IVoucher {
+  id: string;
+  voucherCode: string;
+  expirationDate: Moment;
+  numberOfProduct: number;
+  status: string;
+  originalPrice: number;
+  salePrice: number;
+  category: string;
+  brand: string;
+  location: string;
+  description: string[];
+  image: string;
+}
+
+export interface IVoucherDisplay extends Omit<IVoucher, "expirationDate"> {
+  expirationDate: string;
+}
+
 export interface ILogo {
   name: string;
   img: string;
@@ -66,7 +85,7 @@ export interface IBookingData extends Omit<IBooking, "checked_in_luggage"> {
   luggage: boolean;
 }
 
-export interface IPassengersInput {
+export interface ICustomerInput {
   name: keyof IBooking;
   label: string;
   required?: boolean;

@@ -1,15 +1,15 @@
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import ticketApi from "api/ticketApi";
-import { ITicket } from "pages/interface";
+import voucherApi from "api/voucherApi";
+import { IVoucher } from "pages/interface";
 
-const initialState: { ticketList: ITicket[] } = {
-  ticketList: [],
+const initialState: { voucherList: IVoucher[] } = {
+  voucherList: [],
 };
 
-export const getTrendTickets = createAsyncThunk(
-  "home/getTrendTickets",
+export const getAllVouchers = createAsyncThunk(
+  "home/getAllVouchers",
   async () => {
-    const res = await ticketApi.getTrendTickets();
+    const res = await voucherApi.getAllVouchers();
     return res;
   }
 );
@@ -20,9 +20,9 @@ const home = createSlice({
   reducers: {},
   extraReducers: (builders) => {
     builders.addCase(
-      getTrendTickets.fulfilled,
+      getAllVouchers.fulfilled,
       (state, action: PayloadAction<any>) => {
-        state.ticketList = action.payload;
+        state.voucherList = action.payload;
       }
     );
   },

@@ -17,7 +17,7 @@ import { useNavigate } from "react-router-dom";
 import { PageUrl } from "configuration/enum";
 import moment from "moment";
 import { useAppDispatch, useAppSelector } from "app/hooks";
-import { getTrendTickets } from "./homeSlice";
+import { getAllVouchers } from "./homeSlice";
 import { authSelector, homeSelector } from "app/selectors";
 import { formatPrice } from "utils/helpers/formatPrice";
 import {
@@ -32,7 +32,7 @@ const Home = () => {
   const dispatch = useAppDispatch();
   const home = useAppSelector(homeSelector);
   const auth = useAppSelector(authSelector);
-  const { ticketList } = home;
+  const { voucherList } = home;
   const { user } = auth;
   const homeBanners: string[] = [Banner1, Banner2, Banner3, Banner4];
   const airlinesLogo: ILogo[] = [
@@ -42,24 +42,24 @@ const Home = () => {
     { name: "JetStar Pacific", img: JetStar },
   ];
   const ticketType: SelectDataType[] = [
-    { id: "one", value: "one-way" },
-    { id: "two", value: "round-trip" },
+    { id: "one", value: "active" },
+    { id: "two", value: "inactive" },
   ];
   const ticketData: SelectDataType[] = [
-    { id: "economy", value: "economy class" },
-    { id: "business", value: "business class" },
-    { id: "first", value: "first class" },
+    { id: "clothes", value: "Clothes" },
+    { id: "book", value: "Books" },
+    { id: "smartphone", value: "Smartphones" },
   ];
 
   const searchTicket = async (data: ITicketData) => {};
 
   // Ticket detail
-  const [selectedTicket, setSelectedTicket] = useState<string>("");
+  const [selectedVoucher, setSelectedVoucher] = useState<string>("");
 
-  const handleSelectedTicket = (id: string) => {
-    setSelectedTicket(id);
+  const handleSelectedVoucher = (id: string) => {
+    setSelectedVoucher(id);
   };
-  const handleCloseTicket = () => setSelectedTicket("");
+  const handleCloseVoucher = () => setSelectedVoucher("");
   const handleContinue = async (id: string) => {
     if (user === "") {
       dispatch(handleFormOpenChange(true));
@@ -75,36 +75,21 @@ const Home = () => {
       navigate(PageUrl.CHECKOUT);
     }
   };
-  const flightTicketList = ticketList.map((ticket) => {
-    const {
-      fromLocation,
-      toLocation,
-      startDate,
-      endDate,
-      type,
-      classType,
-      price,
-      id,
-    } = ticket;
-
+  const handledVoucherList = voucherList.map((voucher) => {
     return {
-      id,
-      fromLocation,
-      toLocation,
-      dates: `${moment(startDate).format("DD/MM/YYYY HH:mm")} - ${moment(
-        endDate
-      ).format("DD/MM/YYYY HH:mm")}`,
-      fare: `${type} / ${classType}`,
-      price: `From $${formatPrice(price)}`,
+      ...voucher,
+      expirationDate: `${moment(voucher.expirationDate).format(
+        "DD/MM/YYYY HH:mm"
+      )}`,
     };
   });
-  const selectedTicketData = useMemo(() => {
-    return ticketList.find((ticket) => ticket.id === selectedTicket);
-  }, [selectedTicket, ticketList]);
+  const selectedVoucherData = useMemo(() => {
+    return handledVoucherList.find((ticket) => ticket.id === selectedVoucher);
+  }, [selectedVoucher, handledVoucherList]);
 
   useEffect(() => {
     const fetchData = async () => {
-      await dispatch(getTrendTickets());
+      await dispatch(getAllVouchers());
     };
 
     fetchData();
@@ -118,17 +103,16 @@ const Home = () => {
         ticketType={ticketType}
         searchTicket={searchTicket}
         airlinesLogo={airlinesLogo}
-        handleSelectedTicket={handleSelectedTicket}
-        flightListData={flightTicketList}
+        handleSelectedTicket={handleSelectedVoucher}
+        flightListData={handledVoucherList}
         handleTicketContinue={handleContinue}
       />
-      {selectedTicketData && (
+      {selectedVoucherData && (
         <TicketDetail
-          data={selectedTicketData}
-          handleClose={handleCloseTicket}
+          data={selectedVoucherData}
+          handleClose={handleCloseVoucher}
           handleContinue={handleContinue}
-          open={selectedTicket !== ""}
-          airlinesLogo={airlinesLogo}
+          open={selectedVoucher !== ""}
         />
       )}
     </>

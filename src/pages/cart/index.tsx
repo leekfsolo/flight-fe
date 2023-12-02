@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import CartMainView from "./CartMainView";
 import {
   ILabelValue,
-  IPassengersInput,
+  ICustomerInput,
   IPaymentMethod,
-  ITicket,
+  IVoucher,
 } from "pages/interface";
 import LocalAtmIcon from "@mui/icons-material/LocalAtm";
 import CreditCardIcon from "@mui/icons-material/CreditCard";
@@ -15,8 +15,8 @@ import { cartSelector } from "app/selectors";
 
 const Cart = () => {
   const cart = useAppSelector(cartSelector);
-  const ticketData = cart.ticketData as ITicket;
-  const passengersInput: IPassengersInput[] = [
+  const voucherData = cart.voucherData as IVoucher;
+  const customerInputs: ICustomerInput[] = [
     {
       name: "firstname",
       required: true,
@@ -49,20 +49,20 @@ const Cart = () => {
   ];
 
   const billData: ILabelValue[] = [
-    { label: "Tickets' price", value: ticketData?.price },
+    { label: "Tickets' price", value: voucherData?.salePrice },
     { label: "Service fee", value: 3.65 },
     { label: "Discount", value: 0 },
-    { label: "Total", value: ticketData?.price + 3.65 },
+    { label: "Total", value: voucherData?.salePrice + 3.65 },
   ];
 
   return (
     <CartMainView
-      passengersInput={passengersInput}
+      passengersInput={customerInputs}
       paymentMethod={paymentMethod}
       handleSelectPaymentMethod={handleSelectPaymentMethod}
       paymentMethodData={paymentMethodData}
       billData={billData}
-      ticketData={ticketData}
+      voucherData={voucherData}
     />
   );
 };

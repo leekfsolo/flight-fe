@@ -3,6 +3,7 @@ import { Logo } from "assets";
 import Avatar from "@mui/material/Avatar";
 import Chip from "@mui/material/Chip";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import PersonIcon from "@mui/icons-material/Person";
 import CButton from "components/CButton";
 import WrapperContainer from "components/WrapperContainer";
 import { useAppDispatch } from "app/hooks";
@@ -57,10 +58,9 @@ const HeaderMainView = (props: Props) => {
               <div className='header-account__wrapper' onClick={toggleDropdown}>
                 <Chip
                   avatar={
-                    <Avatar
-                      alt={user}
-                      src='https://png.pngtree.com/png-vector/20190710/ourmid/pngtree-user-vector-avatar-png-image_1541962.jpg'
-                    />
+                    <Avatar alt={user}>
+                      <PersonIcon />
+                    </Avatar>
                   }
                   className='header-account--avatar'
                   label={user}

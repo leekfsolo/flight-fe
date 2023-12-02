@@ -46,7 +46,7 @@ const Footer = () => {
 
           <div className="footer-footnote">
             <small>
-              © 2023 Flight Booking. Note: Link opens in new window. Site may
+              © 2023 Voucher Selling. Note: Link opens in new window. Site may
               not meet accessibility guidelines.
             </small>
           </div>

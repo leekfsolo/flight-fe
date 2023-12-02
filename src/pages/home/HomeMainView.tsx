@@ -11,6 +11,12 @@ import GroupInput, { GroupInputProps } from "components/GroupInput/GroupInput";
 import moment from "moment";
 import { FormControl } from "@mui/material";
 import CCardList from "components/CCardList";
+import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import LoyaltyIcon from '@mui/icons-material/Loyalty';
+import CheckroomIcon from '@mui/icons-material/Checkroom';
+import AutoStoriesIcon from '@mui/icons-material/AutoStories';
+import SmartphoneIcon from '@mui/icons-material/Smartphone';
 
 interface Props {
   bannerList: string[];
@@ -36,7 +42,7 @@ const HomeMainView = (props: Props) => {
     searchTicket,
     airlinesLogo,
     handleSelectedTicket,
-    flightListData,
+    flightListData: voucherList,
     handleTicketContinue,
   } = props;
   const defaultValues: ITicketData = {
@@ -54,20 +60,23 @@ const HomeMainView = (props: Props) => {
   ];
   const filterTicket: GroupInputProps[] = [
     {
-      label: "Destination",
+      label: "Brand",
       type: "text",
-      groupInputData: [
-        { name: "fromLocation", placeholder: "Departure location" },
-        { name: "toLocation", placeholder: "Arrival location" },
-      ],
+      groupInputData: [{ name: "fromLocation", placeholder: "Brand" }],
       control,
     },
     {
-      label: "Date",
+      label: "Store Location",
+      type: "text",
+      groupInputData: [{ name: "fromLocation", placeholder: "Store location" }],
+      control,
+    },
+    {
+      label: "Expiration Date",
       type: "date",
       groupInputData: [
-        { name: "startDate", placeholder: "Departure date" },
-        { name: "endDate", placeholder: "Arrival date" },
+        { name: "startDate", placeholder: "From Date" },
+        { name: "endDate", placeholder: "To Date" },
       ],
       control,
     },
@@ -95,8 +104,8 @@ const HomeMainView = (props: Props) => {
           ))}
         </Swiper>
         <div className='home-banner__content'>
-          <p>Let's travel the world with us</p>
-          <h1>Discover the world with our guide</h1>
+          <p>Unlock Savings, Gift Happiness: Voucher Power!</p>
+          <h1>Gift Vouchers: Your Passport to Savings and Smiles!</h1>
         </div>
 
         <div className='home-banner__search'>
@@ -146,31 +155,31 @@ const HomeMainView = (props: Props) => {
         <section className='home-logos'>
           <WrapperContainer>
             <div className='logo-list'>
-              {airlinesLogo.map((logo, idx) => (
-                <div className='logo-wrapper' key={idx}>
-                  <img src={logo.img} alt='' />
-                </div>
-              ))}
+              <CardGiftcardIcon />
+              <FavoriteIcon />
+              <LoyaltyIcon />
+              <CheckroomIcon />
+              <AutoStoriesIcon />
+              <SmartphoneIcon />
             </div>
           </WrapperContainer>
         </section>
 
         <WrapperContainer>
           <section className='home-flight'>
-            <h4 className='mb-4'>Offers for Trending Flights</h4>
+            <h4 className='mb-4'>Offers for Trending Voucher</h4>
 
             <div className='home-flight-list'>
               <CCardList
-                data={flightListData}
+                data={voucherList}
                 handleDetailClick={handleSelectedTicket}
                 handleBuyClick={handleTicketContinue}
               />
             </div>
             <div className='home-flight--support mt-4'>
               <span>
-                *Fares displayed have been collected within the last 48hrs and
-                may no longer be available at time of booking. Additional fees
-                and charges for optional products and services may apply.
+                *Fares displayed have been collected within the last 12shrs and
+                may no longer be available at time of doing transaction.
               </span>
             </div>
           </section>

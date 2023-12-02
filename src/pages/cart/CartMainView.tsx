@@ -11,9 +11,9 @@ import {
   IBooking,
   IBookingData,
   ILabelValue,
-  IPassengersInput,
+  ICustomerInput,
   IPaymentMethod,
-  ITicket,
+  IVoucher,
 } from "pages/interface";
 import { useAppDispatch } from "app/hooks";
 import { handleLoading } from "app/globalSlice";
@@ -28,7 +28,6 @@ import {
   FormControlLabel,
   Radio,
 } from "@mui/material";
-import AirlineSeatReclineNormalIcon from "@mui/icons-material/AirlineSeatReclineNormal";
 import LuggageIcon from "@mui/icons-material/Luggage";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { useNavigate } from "react-router-dom";
@@ -40,14 +39,20 @@ import customToast, { ToastType } from "components/CustomToast/customToast";
 import { PageUrl } from "configuration/enum";
 import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
 import { OnApproveData } from "@paypal/paypal-js";
+import AspectRatio from "@mui/joy/AspectRatio";
+import Link from "@mui/joy/Link";
+import Card from "@mui/joy/Card";
+import CardContent from "@mui/joy/CardContent";
+import Chip from "@mui/joy/Chip";
+import Typography from "@mui/joy/Typography";
 
 interface Props {
-  passengersInput: IPassengersInput[];
+  passengersInput: ICustomerInput[];
   paymentMethod: number;
   handleSelectPaymentMethod: (value: number) => void;
   paymentMethodData: IPaymentMethod[];
   billData: ILabelValue[];
-  ticketData: ITicket;
+  voucherData: IVoucher;
 }
 
 const defaultValues: IBooking = {
@@ -68,7 +73,7 @@ const CartMainView = (props: Props) => {
     paymentMethod,
     paymentMethodData,
     billData,
-    ticketData,
+    voucherData,
   } = props;
   const {
     control,
@@ -84,7 +89,7 @@ const CartMainView = (props: Props) => {
     const bookingData: IBookingData = {
       ...restData,
       luggage: checked_in_luggage === "no" ? false : true,
-      ticketId: ticketData.id,
+      ticketId: voucherData.id,
     };
 
     const res: any = await dispatch(addBooking(bookingData)).unwrap();
@@ -100,8 +105,21 @@ const CartMainView = (props: Props) => {
   const errorFormHandler: SubmitErrorHandler<IBooking> = (_, event) => {
     event?.target.classList.add("wasvalidated");
   };
-  const { startDate, endDate, fromLocation, toLocation } = ticketData;
-  const isPaidWithPaypal = watch("paymentMethod") === 3;
+  const {
+    id,
+    voucherCode,
+    expirationDate,
+    numberOfProduct,
+    status,
+    originalPrice,
+    salePrice,
+    category,
+    brand,
+    location,
+    description,
+    image,
+  } = voucherData;
+  const isPaidWithPaypal = watch("paymentMethod") === 4;
 
   const createOrder = async () => {
     try {
@@ -145,10 +163,10 @@ const CartMainView = (props: Props) => {
   };
 
   return (
-    <main className="cart">
+    <main className='cart'>
       <WrapperContainer>
         <p
-          className="d-flex align-items-center gap-2 mb-3"
+          className='d-flex align-items-center gap-2 mb-3'
           style={{ cursor: "pointer" }}
           onClick={() => navigate(-1)}
         >
@@ -156,24 +174,24 @@ const CartMainView = (props: Props) => {
           Back
         </p>
         <form
-          action="#"
+          action='#'
           noValidate
-          method="POST"
-          className="row m-0"
+          method='POST'
+          className='row m-0'
           onSubmit={handleSubmit(submitFormHandler, errorFormHandler)}
         >
-          <div className="col-9 p-0 pe-3">
-            <div className="cart-detail">
-              <CartSection title="Passengers" order={1}>
+          <div className='col-9 p-0 pe-3'>
+            <div className='cart-detail'>
+              <CartSection title='Customer Information' order={1}>
                 <div
-                  className="row m-0 justify-content-between"
+                  className='row m-0 justify-content-between'
                   style={{ gap: "16px 0" }}
                 >
                   {passengersInput.map((input) => {
                     const { label, name, required } = input;
 
                     return (
-                      <FormControl key={name} className="passenger-input">
+                      <FormControl key={name} className='passenger-input'>
                         <Controller
                           control={control}
                           name={name}
@@ -188,7 +206,7 @@ const CartMainView = (props: Props) => {
                               : {}
                           }
                           render={({ field }) => (
-                            <FormGroup className="passenger-group">
+                            <FormGroup className='passenger-group'>
                               <InputLabel htmlFor={name}>
                                 <span>
                                   {label} ({required ? "Required" : "Optional"})
@@ -196,7 +214,7 @@ const CartMainView = (props: Props) => {
                               </InputLabel>
                               <CInput
                                 {...field}
-                                size="small"
+                                size='small'
                                 id={name}
                                 valid={!errors[name]}
                               />
@@ -204,7 +222,7 @@ const CartMainView = (props: Props) => {
                           )}
                         />
                         {!!errors[name] && (
-                          <FormHelperText className="ms-0" error>
+                          <FormHelperText className='ms-0' error>
                             {errors[name]?.message}
                           </FormHelperText>
                         )}
@@ -213,67 +231,71 @@ const CartMainView = (props: Props) => {
                   })}
                 </div>
               </CartSection>
-              <CartSection title="Seat Reservation" order={2}>
-                <div className="seat-wrapper">
-                  <AirlineSeatReclineNormalIcon />
-                  <div className="seat-content">
-                    <p>Seat reversation not available</p>
-                    <span>
-                      On this trip, you are free to choose seat when you get
-                      onboard!
-                    </span>
-                  </div>
-                </div>
-              </CartSection>
-              <CartSection title="Extras" order={3}>
-                <div className="extra-luggage mb-3">
-                  <div className="luggage-icon">
-                    <LuggageIcon />
-                  </div>
-                  <div className="luggage-detail">
-                    <p>Included per person</p>
-                    <span>
-                      1 carry-on luggage | 25lb &#x2022; 22 x 14 x 9 in
-                    </span>
-                    <span>
-                      1 checked-in luggage | 50lb &#x2022; 25 x 27 x 14 in
-                    </span>
-                  </div>
-                </div>
 
-                <FormControl className="form-luggage">
-                  <FormLabel id="checked-in luggages">
-                    Do you have any checked-in luggages?
-                  </FormLabel>
-                  <Controller
-                    name="checked_in_luggage"
-                    control={control}
-                    render={({ field }) => (
-                      <RadioGroup
-                        row
-                        aria-labelledby="checked-in luggages"
-                        {...field}
+              <CartSection title='Your Item' order={3}>
+                <Card
+                  variant='outlined'
+                  orientation='horizontal'
+                  sx={{
+                    width: "500px",
+                    "&:hover": {
+                      boxShadow: "md",
+                      borderColor: "neutral.outlinedHoverBorder",
+                    },
+                  }}
+                >
+                  <AspectRatio ratio='1' sx={{ width: 90 }}>
+                    <img src={image} loading='lazy' alt='' />
+                  </AspectRatio>
+                  <CardContent>
+                    <Typography level='title-lg' id='card-description'>
+                      {brand}
+                    </Typography>
+                    <Typography
+                      level='body-sm'
+                      aria-describedby='card-description'
+                      mb={1}
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                      }}
+                    >
+                      <Link
+                        overlay
+                        underline='none'
+                        href='#interactive-card'
+                        sx={{ color: "text.tertiary" }}
                       >
-                        <FormControlLabel
-                          value="no"
-                          control={<Radio />}
-                          label="No"
-                        />
-                        <FormControlLabel
-                          value="yes"
-                          control={<Radio />}
-                          label="Yes"
-                        />
-                      </RadioGroup>
-                    )}
-                  />
-                </FormControl>
+                        Location: {location}
+                      </Link>
+                      <Link
+                        overlay
+                        underline='none'
+                        href='#interactive-card'
+                        sx={{ color: "text.tertiary" }}
+                      >
+                        Category: {category}
+                      </Link>
+                    </Typography>
+                    <Chip
+                      variant='outlined'
+                      color={status == "inactive" ? "danger" : "primary"}
+                      size='sm'
+                      sx={{ pointerEvents: "none" }}
+                    >
+                      {status == "inactive"
+                        ? "the voucher was sold out"
+                        : `the voucher will be expired in ${expirationDate}`}
+                    </Chip>
+                  </CardContent>
+                </Card>
               </CartSection>
-              <CartSection title="Payment" order={4}>
-                <div className="payment-wrapper">
+
+              <CartSection title='Payment' order={4}>
+                <div className='payment-wrapper'>
                   {paymentMethodData.map((data, idx) => (
                     <div
-                      className="payment-method"
+                      className='payment-method'
                       key={data.name}
                       aria-selected={idx === paymentMethod}
                       onClick={() => {
@@ -289,38 +311,14 @@ const CartMainView = (props: Props) => {
               </CartSection>
             </div>
           </div>
-          <div className="col p-0">
-            <div className="cart-overview">
-              <section className="cart-booking">
-                <h4>Your Booking</h4>
-                <div className="booking-detail">
-                  <p className="booking-date">
-                    {moment(startDate).format("ddd, MMM D")}
-                  </p>
-                  <div className="booking-summary">
-                    <div className="date-range">
-                      <span>{moment(startDate).format("H:mm A")}</span>
-                      <span>{moment(endDate).format("H:mm A")}</span>
-                    </div>
-                    <div className="booking-timeline">
-                      <div className="timeline-start"></div>
-                      <div className="timeline-divider"></div>
-                      <div className="timeline-end"></div>
-                    </div>
-                    <div className="location-range">
-                      <span>{fromLocation}</span>
-                      <span>{toLocation}</span>
-                    </div>
-                  </div>
-                </div>
-              </section>
-
-              <section className="cart-bill">
+          <div className='col p-0'>
+            <div className='cart-overview'>
+              <section className='cart-bill'>
                 <h4>Your Bill</h4>
-                <div className="cart-bill__detail mb-3">
+                <div className='cart-bill__detail mb-3'>
                   {billData.map((data, idx) => (
-                    <div className="bill-price" key={data.label}>
-                      <span className="bill-price--label">{data.label}</span>
+                    <div className='bill-price' key={data.label}>
+                      <span className='bill-price--label'>{data.label}</span>
                       <span
                         className={`bill-price--value ${
                           idx === 3 ? "red-value" : ""
@@ -343,7 +341,7 @@ const CartMainView = (props: Props) => {
                     />
                   </PayPalScriptProvider>
                 ) : (
-                  <CButton type="submit" className="w-100">
+                  <CButton type='submit' className='w-100'>
                     Proceed Payment
                   </CButton>
                 )}

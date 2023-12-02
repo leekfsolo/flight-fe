@@ -4,14 +4,21 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
+import { Box, Grid } from "@mui/material";
 
 interface DataProps {
-  fromLocation: string;
-  toLocation: string;
-  dates: string;
-  fare: string;
-  price: string;
   id: string;
+  voucherCode: string;
+  expirationDate: string;
+  numberOfVoucher: number;
+  status: string;
+  originalPrice: number;
+  salePrice: number;
+  category: string;
+  brand: string;
+  location: string;
+  description: string;
+  image: string;
 }
 
 interface Props {
@@ -20,32 +27,57 @@ interface Props {
   handleBuyClick?: (id: string) => void;
 }
 
-const imageUrl = "https://picsum.photos/seed/123/200/300";
-
 export default function CCard({
   data,
   handleDetailClick,
   handleBuyClick,
 }: Props) {
-  const { fromLocation, toLocation, dates, fare, price, id } = data;
+  const {
+    id,
+    voucherCode,
+    expirationDate,
+    numberOfVoucher,
+    status,
+    originalPrice,
+    salePrice,
+    category,
+    brand,
+    location,
+    description,
+    image,
+  } = data;
   return (
     <Card sx={{ maxWidth: 345, minHeight: 450 }}>
-      <CardMedia sx={{ height: 140 }} image={imageUrl} title='green iguana' />
+      <CardMedia sx={{ height: 140 }} image={image} title='green iguana' />
       <CardContent>
         <Typography gutterBottom variant='h6' component='div' height={70}>
-          {fromLocation} - {toLocation}
+          {brand}
         </Typography>
         <Typography variant='body1' color='text.secondary'>
-          Time: {dates}
+          Category: {category}
         </Typography>
         <Typography variant='body1' color='text.secondary'>
-          Fare: {fare}
+          Location: {location}
         </Typography>
-        <Typography variant='body1' color='text.secondary'>
-          Price: {price}
-        </Typography>
+        <Box sx={{ m: 3 }} />
+        <Grid container spacing={2} alignItems='center'>
+          <Grid item xs={4}>
+            <Typography
+              sx={{ textDecoration: "line-through" }}
+              variant='h6'
+              color='text.disabled'
+            >
+              ${originalPrice}
+            </Typography>
+          </Grid>
+          <Grid item xs={8}>
+            <Typography variant='h4' color='success.main'>
+              ${salePrice}
+            </Typography>
+          </Grid>
+        </Grid>
       </CardContent>
-      <CardActions>
+      <CardActions sx={{ display: "flex", justifyContent: "space-around" }}>
         <Button
           size='small'
           onClick={() => handleBuyClick && handleBuyClick(id)}
