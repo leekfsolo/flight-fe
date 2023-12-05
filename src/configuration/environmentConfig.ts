@@ -1,6 +1,6 @@
 const enviromentConfig = {
   development: {
-    endpoint: "http://127.0.0.1:8000",
+    endpoint: "https://voucher-backend-9lwqkw2lp-kien-vos-projects.vercel.app",
   },
   production: {
     endpoint: "http://18.139.114.164",
